@@ -29,7 +29,19 @@ function parseMovie(movie) {
 }
 
 function sort(movies, sortBy) {
-  movies.sort((a, b) => (a[sortBy] <= b[sortBy] ? 1 : -1));
+  if (!sortBy) return;
+
+  const order = {
+    title: 'asc',
+    year: 'desc',
+    vote_average: 'asc',
+  };
+
+  if (order[sortBy] === 'desc') {
+    movies.sort((a, b) => (a[sortBy] <= b[sortBy] ? 1 : -1));
+  } else {
+    movies.sort((a, b) => (a[sortBy] <= b[sortBy] ? -1 : 1));
+  }
 }
 
 function App() {
