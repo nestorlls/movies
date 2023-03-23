@@ -1,13 +1,23 @@
-import { useState } from 'react';
+import styled from '@emotion/styled';
+import { useEffect, useState } from 'react';
 import MovieList from './components/MovieList';
 import SearchForm from './components/pages/SearchForm';
-import { getMovies } from './services/MovieService';
+import { getGenres, getMovies } from './services/MovieService';
 
-function parsedMovies(movies) {
-  return movies.map((movie) => parseMovie(movie));
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  max-width: 780px;
+`;
+
+function parsedMovies(movies, genres) {
+  return movies.map((movie) => parseMovie(movie, genres));
 }
 
-function parseMovie(movie) {
+function parseMovie(movie, genres) {
   const {
     id,
     original_title,
@@ -24,7 +34,7 @@ function parseMovie(movie) {
     vote_average,
     overview,
     poster: `https://image.tmdb.org/t/p/w200/${poster_path}`,
-    genres: genre_ids,
+    genres: genre_ids.map((genre_id) => genres[genre_id]),
   };
 }
 
@@ -47,6 +57,7 @@ function sort(movies, sortBy) {
 function App() {
   const [movies, setMovies] = useState([]);
   const [sortBy, setSortBy] = useState('');
+  const [genres, setGenres] = useState({});
   sort(movies, sortBy);
 
   async function searchMovies(query) {
@@ -54,15 +65,25 @@ function App() {
     try {
       const data = await getMovies(query);
 
-      const parseMovies = parsedMovies(data.results);
+      const parseMovies = parsedMovies(data.results, genres);
       setMovies(parseMovies);
     } catch (error) {
       console.log(error);
     }
   }
 
+  useEffect(() => {
+    getGenres().then((data) => {
+      const genresObject = {};
+      for (const genre of data.genres) {
+        genresObject[genre.id] = genre.name;
+      }
+      setGenres(genresObject);
+    });
+  }, []);
+
   return (
-    <div>
+    <Container>
       <h1 style={{ textAlign: 'center' }}>🎥 Movies workshop 🎥</h1>
       <SearchForm onSubmit={searchMovies} />
       <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
@@ -72,7 +93,7 @@ function App() {
         <option value='vote_average'>score</option>
       </select>
       <MovieList movies={movies} />
-    </div>
+    </Container>
   );
 }
 
