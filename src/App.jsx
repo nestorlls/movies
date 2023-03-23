@@ -11,6 +11,8 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   max-width: 780px;
+  padding: 16px;
+  margin: 0 auto;
 `;
 
 function parsedMovies(movies, genres) {

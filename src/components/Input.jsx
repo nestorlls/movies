@@ -22,7 +22,7 @@ export const Input = ({
   label,
 }) => {
   return (
-    <div>
+    <div style={{ width: '100%' }}>
       {label && <label htmlFor={id || name}>{label}:</label>}
       <StyledImput
         type={type}
