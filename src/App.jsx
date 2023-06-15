@@ -163,38 +163,42 @@ function App() {
     <Container>
       <h1 style={{ textAlign: 'center' }}>🎥 Movies 🎥</h1>
       <SearchForm onSubmit={searchMovies} />
-      <CheckBox
-        title="Genres"
-        uniqueItems={uniqueGenres}
-        handleCheck={handleCheck}
-        filter={filter}
-      />
-      <CheckBox
-        title="Release year"
-        uniqueItems={uniqueYears}
-        handleCheck={handleYear}
-        filter={filter}
-      />
-      <MaxMinWrapper>
-        <p className="title-score">Score</p>
-        <div className="score-range">
-          <Input
-            type="number"
-            name="min"
-            id="min"
-            placeholder="min"
-            onChange={handleScore}
+      {movies.length > 0 && (
+        <>
+          <CheckBox
+            title="Genres"
+            uniqueItems={uniqueGenres}
+            handleCheck={handleCheck}
+            filter={filter}
           />
-          <span>-</span>
-          <Input
-            type="number"
-            name="max"
-            id="max"
-            placeholder="max"
-            onChange={handleScore}
+          <CheckBox
+            title="Release year"
+            uniqueItems={uniqueYears}
+            handleCheck={handleYear}
+            filter={filter}
           />
-        </div>
-      </MaxMinWrapper>
+          <MaxMinWrapper>
+            <p className="title-score">Score</p>
+            <div className="score-range">
+              <Input
+                type="number"
+                name="min"
+                id="min"
+                placeholder="min"
+                onChange={handleScore}
+              />
+              <span>-</span>
+              <Input
+                type="number"
+                name="max"
+                id="max"
+                placeholder="max"
+                onChange={handleScore}
+              />
+            </div>
+          </MaxMinWrapper>
+        </>
+      )}
       <Select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
         <option value="">Sort By</option>
         <option value="title">Title</option>
