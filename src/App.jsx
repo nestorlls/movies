@@ -43,6 +43,20 @@ const MaxMinWrapper = styled.div`
   }
 `;
 
+const Select = styled.select`
+  width: 100%;
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
+  padding: 8px 12px;
+  border: 1px solid #d3d3d3;
+  border-radius: 6px;
+  background: #ffffff;
+  width: 100%;
+  &:focus {
+    outline: none;
+    border: 1px solid #d3d3d3;
+  }
+`;
+
 function parsedMovies(movies, genres) {
   return movies.map((movie) => parseMovie(movie, genres));
 }
@@ -181,12 +195,12 @@ function App() {
           />
         </div>
       </MaxMinWrapper>
-      <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+      <Select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
         <option value="">Sort By</option>
         <option value="title">Title</option>
         <option value="year">Year</option>
         <option value="vote_average">score</option>
-      </select>
+      </Select>
       <MovieList movies={filteredMovies} />
     </Container>
   );
