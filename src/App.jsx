@@ -163,7 +163,7 @@ function App() {
 
   return (
     <Container>
-      <h1 style={{ textAlign: 'center' }}>🎥 Movies 🎥</h1>
+      <h1 style={{ textAlign: 'center', color: 'white' }}>🎥 Movies 🎥</h1>
       <SearchForm onSubmit={searchMovies} />
       {movies.length > 0 && (
         <>
