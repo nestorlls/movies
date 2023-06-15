@@ -57,12 +57,9 @@ function sort(movies, sortBy) {
 }
 
 function filterMovies(movies, filters) {
-  if (!filters.length) return movies;
-
-  const filteredMovies = movies.filter((movie) =>
-    movie.genres.some((genre) => filters.includes(genre.toLowerCase()))
-  );
-  return filteredMovies;
+  const moviesByGenres = filterByGenres(movies, filters.genres);
+  const moviesByYears = filterByYears(moviesByGenres, filters.years);
+  return moviesByYears;
 }
 
 function getUniqueGenres(movies) {
@@ -75,6 +72,30 @@ function getUniqueGenres(movies) {
   return [...genres];
 }
 
+function getUniqueYears(movies) {
+  const years = new Set();
+  for (const movie of movies) {
+    years.add(movie.year);
+  }
+  return [...years];
+}
+
+function filterByGenres(movies, genres) {
+  if (!genres.length) return movies;
+
+  const filteredMovies = movies.filter((movie) =>
+    movie.genres.some((genre) => genres.includes(genre.toLowerCase()))
+  );
+  return filteredMovies;
+}
+
+function filterByYears(movies, years) {
+  if (!years.length) return movies;
+
+  const filteredMovies = movies.filter((movie) => years.includes(movie.year));
+  return filteredMovies;
+}
+
 function App() {
   const [movies, setMovies] = useState([]);
   const [sortBy, setSortBy] = useState('');
@@ -84,7 +105,6 @@ function App() {
     years: [],
     score: { min: 0, max: Infinity },
   });
-  const [filterGenres, setFilterGenres] = useState([]);
 
   async function searchMovies(query) {
     // LLamar a la api
@@ -98,19 +118,35 @@ function App() {
     }
   }
 
-  const filteredMovies = filterMovies(movies, filterGenres);
+  const filteredMovies = filterMovies(movies, filter);
   const uniqueGenres = getUniqueGenres(movies);
+  const uniqueYears = getUniqueYears(movies);
   sort(filteredMovies, sortBy);
 
   function handleCheck(e) {
     const genreName = e.target.name;
     const isChecked = e.target.checked;
+
     if (isChecked) {
-      setFilter({ ...filter, genre: [...filter.genres, genreName] });
+      setFilter({ ...filter, genres: [...filter.genres, genreName] });
     } else {
-      setFilterGenres({
+      setFilter({
         ...filter,
         genres: filter.genres.filter((genre) => genre !== genreName),
+      });
+    }
+  }
+
+  function handleYear(e) {
+    const year = e.target.name;
+    const isChecked = e.target.checked;
+
+    if (isChecked) {
+      setFilter({ ...filter, years: [...filter.years, year] });
+    } else {
+      setFilter({
+        ...filter,
+        years: filter.years.filter((year) => year !== year),
       });
     }
   }
@@ -132,14 +168,29 @@ function App() {
       <div>
         <p>Genre</p>
         {uniqueGenres.map((genre) => (
-          <label htmlFor={genre.toLowerCase()}>
+          <label htmlFor={genre.toLowerCase()} key={genre}>
             {genre}
             <input
               type="checkbox"
               name={genre.toLowerCase()}
               id={genre.toLowerCase()}
               onChange={handleCheck}
-              checked={filterGenres.includes(genre.toLowerCase())}
+              checked={filter.genres.includes(genre.toLowerCase())}
+            />
+          </label>
+        ))}
+      </div>
+      <div>
+        <p>Release year</p>
+        {uniqueYears.map((year) => (
+          <label htmlFor={year.toLowerCase()} key={year}>
+            {year}
+            <input
+              type="checkbox"
+              name={year.toLowerCase()}
+              id={year.toLowerCase()}
+              onChange={handleYear}
+              checked={filter.years.includes(year.toLowerCase())}
             />
           </label>
         ))}
