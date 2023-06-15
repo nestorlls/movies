@@ -9,6 +9,7 @@ import {
   getUniqueYears,
   sort,
 } from './utils/filters';
+import CheckBox from './components/CheckBox';
 
 const Container = styled.div`
   display: flex;
@@ -127,36 +128,18 @@ function App() {
     <Container>
       <h1 style={{ textAlign: 'center' }}>🎥 Movies 🎥</h1>
       <SearchForm onSubmit={searchMovies} />
-      <div>
-        <p>Genre</p>
-        {uniqueGenres.map((genre) => (
-          <label htmlFor={genre.toLowerCase()} key={genre}>
-            {genre}
-            <input
-              type="checkbox"
-              name={genre.toLowerCase()}
-              id={genre.toLowerCase()}
-              onChange={handleCheck}
-              checked={filter.genres.includes(genre.toLowerCase())}
-            />
-          </label>
-        ))}
-      </div>
-      <div>
-        <p>Release year</p>
-        {uniqueYears.map((year) => (
-          <label htmlFor={year.toLowerCase()} key={year}>
-            {year}
-            <input
-              type="checkbox"
-              name={year.toLowerCase()}
-              id={year.toLowerCase()}
-              onChange={handleYear}
-              checked={filter.years.includes(year.toLowerCase())}
-            />
-          </label>
-        ))}
-      </div>
+      <CheckBox
+        title="Genres"
+        uniqueItems={uniqueGenres}
+        handleCheck={handleCheck}
+        filter={filter}
+      />
+      <CheckBox
+        title="Release year"
+        uniqueItems={uniqueYears}
+        handleCheck={handleCheck}
+        filter={filter}
+      />
       <div>
         <p>Score</p>
         <label htmlFor="min">
