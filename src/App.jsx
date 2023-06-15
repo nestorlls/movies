@@ -130,15 +130,15 @@ function App() {
   }
 
   function handleYear(e) {
-    const year = e.target.name;
+    const yearRelease = e.target.name;
     const isChecked = e.target.checked;
 
     if (isChecked) {
-      setFilter({ ...filter, years: [...filter.years, year] });
+      setFilter({ ...filter, years: [...filter.years, yearRelease] });
     } else {
       setFilter({
         ...filter,
-        years: filter.years.filter((year) => year !== year),
+        years: filter.years.filter((year) => year !== yearRelease),
       });
     }
   }
@@ -169,13 +169,13 @@ function App() {
             title="Genres"
             uniqueItems={uniqueGenres}
             handleCheck={handleCheck}
-            filter={filter}
+            filter={filter.genres}
           />
           <CheckBox
             title="Release year"
             uniqueItems={uniqueYears}
             handleCheck={handleYear}
-            filter={filter}
+            filter={filter.years}
           />
           <MaxMinWrapper>
             <p className="title-score">Score</p>
