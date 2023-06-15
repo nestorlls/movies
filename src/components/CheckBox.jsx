@@ -15,13 +15,12 @@ const CheckBoxWrapper = styled.div`
   .checkbox-input {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 20px;
   }
 
   .checkbox-label {
     display: flex;
     align-items: center;
-    gap: 8px;
 
     input[type='checkbox'] {
       margin: 0;
