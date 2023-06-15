@@ -82,7 +82,7 @@ const CheckBox = ({ title, uniqueItems, handleCheck, filter }) => {
               name={item.toLowerCase()}
               id={item.toLowerCase()}
               onChange={handleCheck}
-              checked={filter.genres.includes(item.toLowerCase())}
+              checked={filter.includes(item.toLowerCase())}
             />
             {item}
           </label>
