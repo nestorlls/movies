@@ -21,6 +21,8 @@ const CheckBoxWrapper = styled.div`
   .checkbox-label {
     display: flex;
     align-items: center;
+    gap: 8px;
+    cursor: pointer;
 
     input[type='checkbox'] {
       margin: 0;
