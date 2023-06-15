@@ -10,6 +10,7 @@ import {
   sort,
 } from './utils/filters';
 import CheckBox from './components/CheckBox';
+import { Input } from './components/Input';
 
 const Container = styled.div`
   display: flex;
@@ -20,6 +21,26 @@ const Container = styled.div`
   max-width: 780px;
   padding: 16px;
   margin: 0 auto;
+`;
+
+const MaxMinWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+
+  .title-score {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0;
+  }
+
+  .score-range {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+  }
 `;
 
 function parsedMovies(movies, genres) {
@@ -137,33 +158,29 @@ function App() {
       <CheckBox
         title="Release year"
         uniqueItems={uniqueYears}
-        handleCheck={handleCheck}
+        handleCheck={handleYear}
         filter={filter}
       />
-      <div>
-        <p>Score</p>
-        <label htmlFor="min">
-          MIN
-          <input
+      <MaxMinWrapper>
+        <p className="title-score">Score</p>
+        <div className="score-range">
+          <Input
             type="number"
             name="min"
             id="min"
             placeholder="min"
             onChange={handleScore}
           />
-        </label>
-        <span>-</span>
-        <label htmlFor="max">
-          MAX
-          <input
+          <span>-</span>
+          <Input
             type="number"
             name="max"
             id="max"
             placeholder="max"
             onChange={handleScore}
           />
-        </label>
-      </div>
+        </div>
+      </MaxMinWrapper>
       <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
         <option value="">Sort By</option>
         <option value="title">Title</option>
