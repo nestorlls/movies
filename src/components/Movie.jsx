@@ -53,6 +53,7 @@ const Overview = styled.p`
   font-size: 14px;
   line-height: 20px;
   color: #111827;
+  text-align: justify;
 `;
 
 const Genres = styled.div`
