@@ -51,6 +51,8 @@ const Select = styled.select`
   border-radius: 6px;
   background: #ffffff;
   width: 100%;
+  margin-top: 25px;
+  margin-bottom: 25px;
   &:focus {
     outline: none;
     border: 1px solid #d3d3d3;
