@@ -56,11 +56,35 @@ function sort(movies, sortBy) {
   }
 }
 
+function filterMovies(movies, filters) {
+  if (!filters.length) return movies;
+
+  const filteredMovies = movies.filter((movie) =>
+    movie.genres.some((genre) => filters.includes(genre.toLowerCase()))
+  );
+  return filteredMovies;
+}
+
+function getUniqueGenres(movies) {
+  const genres = new Set();
+  for (const movie of movies) {
+    for (const genre of movie.genres) {
+      genres.add(genre);
+    }
+  }
+  return [...genres];
+}
+
 function App() {
   const [movies, setMovies] = useState([]);
   const [sortBy, setSortBy] = useState('');
   const [genres, setGenres] = useState({});
-  sort(movies, sortBy);
+  const [filter, setFilter] = useState({
+    genres: [],
+    years: [],
+    score: { min: 0, max: Infinity },
+  });
+  const [filterGenres, setFilterGenres] = useState([]);
 
   async function searchMovies(query) {
     // LLamar a la api
@@ -71,6 +95,23 @@ function App() {
       setMovies(parseMovies);
     } catch (error) {
       console.log(error);
+    }
+  }
+
+  const filteredMovies = filterMovies(movies, filterGenres);
+  const uniqueGenres = getUniqueGenres(movies);
+  sort(filteredMovies, sortBy);
+
+  function handleCheck(e) {
+    const genreName = e.target.name;
+    const isChecked = e.target.checked;
+    if (isChecked) {
+      setFilter({ ...filter, genre: [...filter.genres, genreName] });
+    } else {
+      setFilterGenres({
+        ...filter,
+        genres: filter.genres.filter((genre) => genre !== genreName),
+      });
     }
   }
 
@@ -86,15 +127,30 @@ function App() {
 
   return (
     <Container>
-      <h1 style={{ textAlign: 'center' }}>🎥 Movies workshop 🎥</h1>
+      <h1 style={{ textAlign: 'center' }}>🎥 Movies 🎥</h1>
       <SearchForm onSubmit={searchMovies} />
+      <div>
+        <p>Genre</p>
+        {uniqueGenres.map((genre) => (
+          <label htmlFor={genre.toLowerCase()}>
+            {genre}
+            <input
+              type="checkbox"
+              name={genre.toLowerCase()}
+              id={genre.toLowerCase()}
+              onChange={handleCheck}
+              checked={filterGenres.includes(genre.toLowerCase())}
+            />
+          </label>
+        ))}
+      </div>
       <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
-        <option value=''>Sort By</option>
-        <option value='title'>Title</option>
-        <option value='year'>Year</option>
-        <option value='vote_average'>score</option>
+        <option value="">Sort By</option>
+        <option value="title">Title</option>
+        <option value="year">Year</option>
+        <option value="vote_average">score</option>
       </select>
-      <MovieList movies={movies} />
+      <MovieList movies={filteredMovies} />
     </Container>
   );
 }
