@@ -4,12 +4,16 @@ import React from 'react';
 const CheckBoxWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  color: #fff;
+  margin: 8px 0;
 
   .checkbox-title {
     margin: 0;
     font-size: 16px;
     font-weight: 600;
     margin-bottom: 8px;
+    border-bottom: 1px solid #fff;
+    padding-bottom: 8px;
   }
 
   .checkbox-input {
