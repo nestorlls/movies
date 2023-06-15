@@ -59,7 +59,8 @@ function sort(movies, sortBy) {
 function filterMovies(movies, filters) {
   const moviesByGenres = filterByGenres(movies, filters.genres);
   const moviesByYears = filterByYears(moviesByGenres, filters.years);
-  return moviesByYears;
+  const moviesByScore = filterByScore(moviesByYears, filters.score);
+  return moviesByScore;
 }
 
 function getUniqueGenres(movies) {
@@ -96,6 +97,15 @@ function filterByYears(movies, years) {
   return filteredMovies;
 }
 
+function filterByScore(movies, score) {
+  if (!score.max) return movies;
+  const filteredMovies = movies.filter(
+    (movie) =>
+      movie.vote_average >= score.min && movie.vote_average <= score.max
+  );
+  return filteredMovies;
+}
+
 function App() {
   const [movies, setMovies] = useState([]);
   const [sortBy, setSortBy] = useState('');
@@ -113,6 +123,12 @@ function App() {
 
       const parseMovies = parsedMovies(data.results, genres);
       setMovies(parseMovies);
+      setSortBy('');
+      setFilter({
+        genres: [],
+        years: [],
+        score: { min: 0, max: Infinity },
+      });
     } catch (error) {
       console.log(error);
     }
@@ -149,6 +165,12 @@ function App() {
         years: filter.years.filter((year) => year !== year),
       });
     }
+  }
+
+  function handleScore(e) {
+    const name = e.target.name;
+    const value = e.target.value;
+    setFilter({ ...filter, score: { ...filter.score, [name]: value } });
   }
 
   useEffect(() => {
@@ -194,6 +216,30 @@ function App() {
             />
           </label>
         ))}
+      </div>
+      <div>
+        <p>Score</p>
+        <label htmlFor="min">
+          MIN
+          <input
+            type="number"
+            name="min"
+            id="min"
+            placeholder="min"
+            onChange={handleScore}
+          />
+        </label>
+        <span>-</span>
+        <label htmlFor="max">
+          MAX
+          <input
+            type="number"
+            name="max"
+            id="max"
+            placeholder="max"
+            onChange={handleScore}
+          />
+        </label>
       </div>
       <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
         <option value="">Sort By</option>
